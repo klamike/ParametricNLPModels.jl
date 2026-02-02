@@ -1,0 +1,10 @@
+name = "ParametricNLPModels"
+uuid = "1ff82034-6bb8-44a0-b51b-5c1bd563924f"
+version = "0.1.0"
+authors = ["Klamkin, Michael <mklamkin3@gatech.edu>"]
+
+[deps]
+NLPModels = "a4795742-8479-5a88-8948-cc11e1c8c1a6"
+
+[compat]
+NLPModels = "0.21"
