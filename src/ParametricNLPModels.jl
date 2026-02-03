@@ -4,17 +4,19 @@ import NLPModels: AbstractNLPModel, @lencheck, coo_prod!, @closure, LinearOperat
 
 struct ParametricNLPModelMeta
     nparam::Int
-    nnzj::Int
-    lin_nnzj::Int
-    nln_nnzj::Int
-    nnzh::Int
+    nnzj::Int      # ∇ₚ g
+    nnzh::Int      # ∇ₚ (∇ₓ L)
+    nnzjlcon::Int  # ∇ₚ lcon
+    nnzjucon::Int  # ∇ₚ ucon
+    nnzjlvar::Int  # ∇ₚ lvar
+    nnzjuvar::Int  # ∇ₚ uvar
 end
 
-export grad_param, grad_param!,  # df/dp
-    jac_param_structure, jac_param_structure!,  # dg/dp
+export grad_param, grad_param!,
+    jac_param_structure, jac_param_structure!,
     jac_param_coord, jac_param_coord!,
     jpprod, jpprod!,
-    hess_param_structure, hess_param_structure!,  # d²L/dxdp
+    hess_param_structure, hess_param_structure!,
     hess_param_coord, hess_param_coord!,
     hpprod, hpprod!,
     lcon_jac_param_structure, lcon_jac_param_structure!,
