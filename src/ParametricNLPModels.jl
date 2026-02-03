@@ -17,9 +17,13 @@ export grad_param, grad_param!,  # df/dp
     hess_param_structure, hess_param_structure!,  # d²L/dxdp
     hess_param_coord, hess_param_coord!,
     hpprod, hpprod!,
+    lcon_jac_param_structure, lcon_jac_param_structure!,
     lcon_jpprod, lcon_jpprod!,
+    ucon_jac_param_structure, ucon_jac_param_structure!,
     ucon_jpprod, ucon_jpprod!,
+    lvar_jac_param_structure, lvar_jac_param_structure!,
     lvar_jpprod, lvar_jpprod!,
+    uvar_jac_param_structure, uvar_jac_param_structure!,
     uvar_jpprod, uvar_jpprod!
 
 
