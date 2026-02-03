@@ -44,7 +44,11 @@ export grad_param, grad_param!,  # df/dp
 
 Evaluate `∇ₚf(x)`, the gradient of the objective function at `x` wrt parameters.
 """
-function grad_param end
+function grad_param(nlp::AbstractNLPModel{T, S}, x::AbstractVector) where {T, S}
+  @lencheck nlp.meta.nvar x
+  g = S(undef, nlp.pmeta.nparam)
+  return grad_param!(nlp, x, g)
+end
 
 """
     g = grad_param!(nlp, x, g)
@@ -1206,6 +1210,8 @@ function hess_param_op!(
   end
   return LinearOperator{T}(nlp.meta.nvar, nlp.pmeta.nparam, false, false, prod!, ctprod!, ctprod!)
 end
+
+# NOTE: we implement zero defaults for lcon/ucon/lvar/uvar since in most NLPModels, they are assumed constant/non-parametric.
 
 """
     g = lcon_grad_param(nlp)
