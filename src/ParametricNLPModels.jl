@@ -13,6 +13,7 @@ struct ParametricNLPModelMeta
 end
 
 ParametricNLPModelMeta() = ParametricNLPModelMeta(0,0,0,0,0,0,0)
+ParametricNLPModelMeta(nparam, nnzj, nnzh) = ParametricNLPModelMeta(nparam,nnzj,nnzh,0,0,0,0)
 
 export grad_param, grad_param!,
     jac_param_structure, jac_param_structure!,
