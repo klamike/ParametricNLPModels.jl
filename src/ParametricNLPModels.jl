@@ -19,9 +19,11 @@ export grad_param, grad_param!,
     jac_param_structure, jac_param_structure!,
     jac_param_coord, jac_param_coord!,
     jpprod, jpprod!,
+    jptprod, jptprod!,
     hess_param_structure, hess_param_structure!,
     hess_param_coord, hess_param_coord!,
     hpprod, hpprod!,
+    hptprod, hptprod!,
     lcon_jac_param_structure, lcon_jac_param_structure!,
     lcon_jpprod, lcon_jpprod!,
     ucon_jac_param_structure, ucon_jac_param_structure!,
@@ -105,6 +107,15 @@ end
 Evaluate ``Jₚ(x)v``, the parametric Jacobian-vector product at `x` in place.
 """
 function jpprod! end
+
+function jptprod(nlp::AbstractNLPModel{T, S}, x::AbstractVector, v::AbstractVector) where {T, S}
+  @lencheck nlp.meta.nvar x
+  @lencheck nlp.meta.ncon v
+  Jtv = S(undef, nlp.pmeta.nparam)
+  return jptprod!(nlp, x, v, Jtv)
+end
+
+function jptprod! end
 
 """
     (rows,cols) = hess_param_structure(nlp)
@@ -269,6 +280,21 @@ Evaluate the product of the Lagrangian variable-parameter Hessian at `(x,y)` wit
 place, with objective function scaled by `obj_weight`.
 """
 function hpprod! end
+
+function hptprod(
+  nlp::AbstractNLPModel{T, S},
+  x::AbstractVector,
+  y::AbstractVector,
+  v::AbstractVector;
+  obj_weight::Real = one(T),
+) where {T, S}
+  @lencheck nlp.meta.nvar x v
+  @lencheck nlp.meta.ncon y
+  Htv = S(undef, nlp.pmeta.nparam)
+  return hptprod!(nlp, x, y, v, Htv; obj_weight = obj_weight)
+end
+
+function hptprod! end
 
 # NOTE: we implement zero defaults for lcon/ucon/lvar/uvar since in most NLPModels, they are assumed constant/non-parametric.
 
