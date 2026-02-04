@@ -26,12 +26,16 @@ export grad_param, grad_param!,
     hptprod, hptprod!,
     lcon_jac_param_structure, lcon_jac_param_structure!,
     lcon_jpprod, lcon_jpprod!,
+    lcon_jptprod, lcon_jptprod!,
     ucon_jac_param_structure, ucon_jac_param_structure!,
     ucon_jpprod, ucon_jpprod!,
+    ucon_jptprod, ucon_jptprod!,
     lvar_jac_param_structure, lvar_jac_param_structure!,
     lvar_jpprod, lvar_jpprod!,
+    lvar_jptprod, lvar_jptprod!,
     uvar_jac_param_structure, uvar_jac_param_structure!,
-    uvar_jpprod, uvar_jpprod!
+    uvar_jpprod, uvar_jpprod!,
+    uvar_jptprod, uvar_jptprod!
 
 
 """
@@ -436,6 +440,50 @@ function uvar_jpprod!(nlp, v, Jv)
     @lencheck nlp.pmeta.nparam v
     fill!(Jv, zero(eltype(Jv)))
     return Jv
+end
+
+function lvar_jptprod(nlp::AbstractNLPModel{T, S}, v::AbstractVector) where {T, S}
+    @lencheck nlp.meta.nvar v
+    Jtv = S(undef, nlp.pmeta.nparam)
+    return lvar_jptprod!(nlp, v, Jtv)
+end
+
+function lvar_jptprod!(nlp, v, Jtv)
+    fill!(Jtv, zero(eltype(Jtv)))
+    return Jtv
+end
+
+function uvar_jptprod(nlp::AbstractNLPModel{T, S}, v::AbstractVector) where {T, S}
+    @lencheck nlp.meta.nvar v
+    Jtv = S(undef, nlp.pmeta.nparam)
+    return uvar_jptprod!(nlp, v, Jtv)
+end
+
+function uvar_jptprod!(nlp, v, Jtv)
+    fill!(Jtv, zero(eltype(Jtv)))
+    return Jtv
+end
+
+function lcon_jptprod(nlp::AbstractNLPModel{T, S}, v::AbstractVector) where {T, S}
+    @lencheck nlp.meta.ncon v
+    Jtv = S(undef, nlp.pmeta.nparam)
+    return lcon_jptprod!(nlp, v, Jtv)
+end
+
+function lcon_jptprod!(nlp, v, Jtv)
+    fill!(Jtv, zero(eltype(Jtv)))
+    return Jtv
+end
+
+function ucon_jptprod(nlp::AbstractNLPModel{T, S}, v::AbstractVector) where {T, S}
+    @lencheck nlp.meta.ncon v
+    Jtv = S(undef, nlp.pmeta.nparam)
+    return ucon_jptprod!(nlp, v, Jtv)
+end
+
+function ucon_jptprod!(nlp, v, Jtv)
+    fill!(Jtv, zero(eltype(Jtv)))
+    return Jtv
 end
 
 end # module ParametricNLPModels
