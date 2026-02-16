@@ -18,11 +18,11 @@ export grad_param, grad_param!,
     ucon_jac_param_structure, ucon_jac_param_structure!,
     ucon_jpprod, ucon_jpprod!,
     ucon_jptprod, ucon_jptprod!,
-    lvar_jac, lvar_jac!,
+    lvar_jac_param, lvar_jac!_param,
     lvar_jac_param_structure, lvar_jac_param_structure!,
     lvar_jpprod, lvar_jpprod!,
     lvar_jptprod, lvar_jptprod!,
-    uvar_jac, uvar_jac!,
+    uvar_jac_param, uvar_jac!_param,
     uvar_jac_param_structure, uvar_jac_param_structure!,
     uvar_jpprod, uvar_jpprod!,
     uvar_jptprod, uvar_jptprod!
@@ -465,30 +465,30 @@ end
 function ucon_jptprod! end
 
 """
-    J = lcon_jac(nlp)
+    J = lcon_jac_param(nlp)
 
 Evaluate the Jacobian of lower constraint bounds wrt parameters.
 This function is only available if `nlp.pmeta.lcon_jac_available` is set to `true`.
 """
-function lcon_jac(nlp::AbstractNLPModel)
+function lcon_jac_param(nlp::AbstractNLPModel)
     J = similar(NLPModels.get_x0(nlp), nlp.meta.ncon, nlp.pmeta.nparam)
-    return lcon_jac!(nlp, J)
+    return lcon_jac_param!(nlp, J)
 end
 
-function lcon_jac! end
+function lcon_jac_param! end
 
 """
-    J = ucon_jac(nlp)
+    J = ucon_jac_param(nlp)
 
 Evaluate the Jacobian of upper constraint bounds wrt parameters.
 This function is only available if `nlp.pmeta.ucon_jac_available` is set to `true`.
 """
-function ucon_jac(nlp::AbstractNLPModel)
+function ucon_jac_param(nlp::AbstractNLPModel)
     J = similar(NLPModels.get_x0(nlp), nlp.meta.ncon, nlp.pmeta.nparam)
-    return ucon_jac!(nlp, J)
+    return ucon_jac_param!(nlp, J)
 end
 
-function ucon_jac! end
+function ucon_jac_param! end
 
 """
     (rows,cols) = lvar_jac_param_structure(nlp)
@@ -576,27 +576,27 @@ end
 function uvar_jptprod! end
 
 """
-    J = lvar_jac(nlp)
+    J = lvar_jac_param(nlp)
 
 Evaluate the Jacobian of lower variable bounds wrt parameters.
 This function is only available if `nlp.pmeta.lvar_jac_available` is set to `true`.
 """
-function lvar_jac(nlp::AbstractNLPModel)
+function lvar_jac_param(nlp::AbstractNLPModel)
     J = similar(NLPModels.get_x0(nlp), nlp.meta.nvar, nlp.pmeta.nparam)
-    return lvar_jac!(nlp, J)
+    return lvar_jac_param!(nlp, J)
 end
 
-function lvar_jac! end
+function lvar_jac_param! end
 
 """
-    J = uvar_jac(nlp)
+    J = uvar_jac_param(nlp)
 
 Evaluate the Jacobian of upper variable bounds wrt parameters.
 This function is only available if `nlp.pmeta.uvar_jac_available` is set to `true`.
 """
-function uvar_jac(nlp::AbstractNLPModel)
+function uvar_jac_param(nlp::AbstractNLPModel)
     J = similar(NLPModels.get_x0(nlp), nlp.meta.nvar, nlp.pmeta.nparam)
-    return uvar_jac!(nlp, J)
+    return uvar_jac_param!(nlp, J)
 end
 
-function uvar_jac! end
+function uvar_jac_param! end
