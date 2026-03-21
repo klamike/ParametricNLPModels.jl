@@ -25,246 +25,165 @@ export set_param_values!, get_param_values,
   uvar_jpprod, uvar_jpprod!,
   uvar_jptprod, uvar_jptprod!
 
+"""
+    get_param_values(nlp)
+
+Return ``p``, the current parameter values stored by `nlp`.
+"""
 function get_param_values end
+"""
+    set_param_values!(nlp, p)
+
+Overwrite the parameter values stored by `nlp` with ``p``.
+"""
 function set_param_values! end
+"""
+    grad_param!(nlp, x, g)
+
+Evaluate ``∇ₚf(x, p)``, the gradient of the objective function with respect to the parameters, at `x` in place.
+"""
 function grad_param! end
+"""
+    jac_param_structure!(nlp, rows, cols)
+
+Return the structure of ``Jₚ(x, p)``, the constraints Jacobian with respect to the parameters, in sparse coordinate format in place.
+"""
 function jac_param_structure! end
+"""
+    jac_param_coord!(nlp, x, vals)
+
+Evaluate ``Jₚ(x, p)``, the constraints Jacobian with respect to the parameters, at `x` in sparse coordinate format in place.
+"""
 function jac_param_coord! end
+"""
+    jpprod!(nlp, x, v, Jv)
+
+Evaluate ``Jₚ(x, p)v``, the parameter-Jacobian-vector product, at `x` in place.
+"""
 function jpprod! end
+"""
+    jptprod!(nlp, x, v, Jtv)
+
+Evaluate ``Jₚ(x, p)ᵀv``, the transposed-parameter-Jacobian-vector product, at `x` in place.
+"""
 function jptprod! end
+"""
+    hess_param_structure!(nlp, rows, cols)
+
+Return the structure of ``∇ₓₚL(x, y, p)``, the mixed block of the Lagrangian Hessian, in sparse coordinate format in place.
+"""
 function hess_param_structure! end
+"""
+    hess_param_coord!(nlp, x, y, vals; obj_weight = 1)
+
+Evaluate ``∇ₓₚL(x, y, p)``, the mixed block of the Lagrangian Hessian, at `(x, y)` in sparse coordinate format in place.
+"""
 function hess_param_coord! end
+"""
+    hpprod!(nlp, x, y, v, Hv; obj_weight = 1)
+
+Evaluate ``∇ₓₚL(x, y, p)v``, the mixed-Hessian-vector product, at `(x, y)` in place.
+"""
 function hpprod! end
+"""
+    hptprod!(nlp, x, y, v, Htv; obj_weight = 1)
+
+Evaluate ``∇ₓₚL(x, y, p)ᵀv``, the transposed-mixed-Hessian-vector product, at `(x, y)` in place.
+"""
 function hptprod! end
+"""
+    lcon_jac_param_structure!(nlp, rows, cols)
+
+Return the structure of ``∂ℓᶜ(p) / ∂p`` in sparse coordinate format in place.
+"""
 function lcon_jac_param_structure! end
+"""
+    lcon_jac_param_coord!(nlp, vals)
+
+Evaluate ``∂ℓᶜ(p) / ∂p`` in sparse coordinate format in place.
+"""
 function lcon_jac_param_coord! end
+"""
+    lcon_jpprod!(nlp, v, Jv)
+
+Evaluate ``(∂ℓᶜ(p) / ∂p) v`` in place.
+"""
 function lcon_jpprod! end
+"""
+    lcon_jptprod!(nlp, v, Jtv)
+
+Evaluate ``(∂ℓᶜ(p) / ∂p)ᵀ v`` in place.
+"""
 function lcon_jptprod! end
+"""
+    ucon_jac_param_structure!(nlp, rows, cols)
+
+Return the structure of ``∂uᶜ(p) / ∂p`` in sparse coordinate format in place.
+"""
 function ucon_jac_param_structure! end
+"""
+    ucon_jac_param_coord!(nlp, vals)
+
+Evaluate ``∂uᶜ(p) / ∂p`` in sparse coordinate format in place.
+"""
 function ucon_jac_param_coord! end
+"""
+    ucon_jpprod!(nlp, v, Jv)
+
+Evaluate ``(∂uᶜ(p) / ∂p) v`` in place.
+"""
 function ucon_jpprod! end
+"""
+    ucon_jptprod!(nlp, v, Jtv)
+
+Evaluate ``(∂uᶜ(p) / ∂p)ᵀ v`` in place.
+"""
 function ucon_jptprod! end
+"""
+    lvar_jac_param_structure!(nlp, rows, cols)
+
+Return the structure of ``∂ℓˣ(p) / ∂p`` in sparse coordinate format in place.
+"""
 function lvar_jac_param_structure! end
+"""
+    lvar_jac_param_coord!(nlp, vals)
+
+Evaluate ``∂ℓˣ(p) / ∂p`` in sparse coordinate format in place.
+"""
 function lvar_jac_param_coord! end
+"""
+    lvar_jpprod!(nlp, v, Jv)
+
+Evaluate ``(∂ℓˣ(p) / ∂p) v`` in place.
+"""
 function lvar_jpprod! end
+"""
+    lvar_jptprod!(nlp, v, Jtv)
+
+Evaluate ``(∂ℓˣ(p) / ∂p)ᵀ v`` in place.
+"""
 function lvar_jptprod! end
+"""
+    uvar_jac_param_structure!(nlp, rows, cols)
+
+Return the structure of ``∂uˣ(p) / ∂p`` in sparse coordinate format in place.
+"""
 function uvar_jac_param_structure! end
+"""
+    uvar_jac_param_coord!(nlp, vals)
+
+Evaluate ``∂uˣ(p) / ∂p`` in sparse coordinate format in place.
+"""
 function uvar_jac_param_coord! end
+"""
+    uvar_jpprod!(nlp, v, Jv)
+
+Evaluate ``(∂uˣ(p) / ∂p) v`` in place.
+"""
 function uvar_jpprod! end
+"""
+    uvar_jptprod!(nlp, v, Jtv)
+
+Evaluate ``(∂uˣ(p) / ∂p)ᵀ v`` in place.
+"""
 function uvar_jptprod! end
-
-function grad_param(nlp::NLPModels.AbstractNLPModel{T, S}, x::AbstractVector) where {T, S}
-  @lencheck NLPModels.get_nvar(nlp) x
-  g = S(undef, get_nparam(nlp))
-  return grad_param!(nlp, x, g)
-end
-
-function jac_param_structure(nlp::NLPModels.AbstractNLPModel)
-  rows = Vector{Int}(undef, get_nnzjp(nlp))
-  cols = Vector{Int}(undef, get_nnzjp(nlp))
-  jac_param_structure!(nlp, rows, cols)
-end
-
-function jac_param_coord(nlp::NLPModels.AbstractNLPModel{T, S}, x::AbstractVector) where {T, S}
-  @lencheck NLPModels.get_nvar(nlp) x
-  vals = S(undef, get_nnzjp(nlp))
-  return jac_param_coord!(nlp, x, vals)
-end
-
-function jpprod(nlp::NLPModels.AbstractNLPModel{T, S}, x::AbstractVector, v::AbstractVector) where {T, S}
-  @lencheck NLPModels.get_nvar(nlp) x
-  @lencheck get_nparam(nlp) v
-  Jv = S(undef, NLPModels.get_ncon(nlp))
-  return jpprod!(nlp, x, v, Jv)
-end
-
-function jptprod(nlp::NLPModels.AbstractNLPModel{T, S}, x::AbstractVector, v::AbstractVector) where {T, S}
-  @lencheck NLPModels.get_nvar(nlp) x
-  @lencheck NLPModels.get_ncon(nlp) v
-  Jtv = S(undef, get_nparam(nlp))
-  return jptprod!(nlp, x, v, Jtv)
-end
-
-function hess_param_structure(nlp::NLPModels.AbstractNLPModel)
-  rows = Vector{Int}(undef, get_nnzhp(nlp))
-  cols = Vector{Int}(undef, get_nnzhp(nlp))
-  hess_param_structure!(nlp, rows, cols)
-end
-
-function hess_param_coord!(
-  nlp::NLPModels.AbstractNLPModel{T, S},
-  x::AbstractVector{T},
-  vals::AbstractVector;
-  obj_weight::Real = one(T),
-) where {T, S}
-  @lencheck NLPModels.get_nvar(nlp) x
-  @lencheck get_nnzhp(nlp) vals
-  y = fill!(S(undef, NLPModels.get_ncon(nlp)), 0)
-  hess_param_coord!(nlp, x, y, vals, obj_weight = obj_weight)
-end
-
-function hess_param_coord(
-  nlp::NLPModels.AbstractNLPModel{T, S},
-  x::AbstractVector;
-  obj_weight::Real = one(T),
-) where {T, S}
-  @lencheck NLPModels.get_nvar(nlp) x
-  vals = S(undef, get_nnzhp(nlp))
-  return hess_param_coord!(nlp, x, vals; obj_weight = obj_weight)
-end
-
-function hess_param_coord(
-  nlp::NLPModels.AbstractNLPModel{T, S},
-  x::AbstractVector,
-  y::AbstractVector;
-  obj_weight::Real = one(T),
-) where {T, S}
-  @lencheck NLPModels.get_nvar(nlp) x
-  @lencheck NLPModels.get_ncon(nlp) y
-  vals = S(undef, get_nnzhp(nlp))
-  return hess_param_coord!(nlp, x, y, vals; obj_weight = obj_weight)
-end
-
-function hpprod(
-  nlp::NLPModels.AbstractNLPModel{T, S},
-  x::AbstractVector,
-  v::AbstractVector;
-  obj_weight::Real = one(T),
-) where {T, S}
-  @lencheck NLPModels.get_nvar(nlp) x
-  @lencheck get_nparam(nlp) v
-  Hv = S(undef, NLPModels.get_nvar(nlp))
-  return hpprod!(nlp, x, v, Hv; obj_weight = obj_weight)
-end
-
-function hpprod(
-  nlp::NLPModels.AbstractNLPModel{T, S},
-  x::AbstractVector,
-  y::AbstractVector,
-  v::AbstractVector;
-  obj_weight::Real = one(T),
-) where {T, S}
-  @lencheck NLPModels.get_nvar(nlp) x
-  @lencheck get_nparam(nlp) v
-  @lencheck NLPModels.get_ncon(nlp) y
-  Hv = S(undef, NLPModels.get_nvar(nlp))
-  return hpprod!(nlp, x, y, v, Hv; obj_weight = obj_weight)
-end
-
-function hpprod!(
-  nlp::NLPModels.AbstractNLPModel{T, S},
-  x::AbstractVector,
-  v::AbstractVector,
-  Hv::AbstractVector;
-  obj_weight::Real = one(T),
-) where {T, S}
-  @lencheck NLPModels.get_nvar(nlp) x Hv
-  @lencheck get_nparam(nlp) v
-  y = fill!(S(undef, NLPModels.get_ncon(nlp)), 0)
-  hpprod!(nlp, x, y, v, Hv, obj_weight = obj_weight)
-end
-
-function hptprod(
-  nlp::NLPModels.AbstractNLPModel{T, S},
-  x::AbstractVector,
-  y::AbstractVector,
-  v::AbstractVector;
-  obj_weight::Real = one(T),
-) where {T, S}
-  @lencheck NLPModels.get_nvar(nlp) x v
-  @lencheck NLPModels.get_ncon(nlp) y
-  Htv = S(undef, get_nparam(nlp))
-  return hptprod!(nlp, x, y, v, Htv; obj_weight = obj_weight)
-end
-
-function lcon_jac_param_structure(nlp::NLPModels.AbstractNLPModel)
-  rows = Vector{Int}(undef, get_nnzjplcon(nlp))
-  cols = Vector{Int}(undef, get_nnzjplcon(nlp))
-  lcon_jac_param_structure!(nlp, rows, cols)
-end
-
-function lcon_jac_param_coord(nlp::NLPModels.AbstractNLPModel{T, S}) where {T, S}
-  vals = S(undef, get_nnzjplcon(nlp))
-  return lcon_jac_param_coord!(nlp, vals)
-end
-
-function lcon_jpprod(nlp::NLPModels.AbstractNLPModel{T, S}, v::AbstractVector) where {T, S}
-  @lencheck get_nparam(nlp) v
-  Jv = S(undef, NLPModels.get_ncon(nlp))
-  return lcon_jpprod!(nlp, v, Jv)
-end
-
-function lcon_jptprod(nlp::NLPModels.AbstractNLPModel{T, S}, v::AbstractVector) where {T, S}
-  @lencheck NLPModels.get_ncon(nlp) v
-  Jtv = S(undef, get_nparam(nlp))
-  return lcon_jptprod!(nlp, v, Jtv)
-end
-
-function ucon_jac_param_structure(nlp::NLPModels.AbstractNLPModel)
-  rows = Vector{Int}(undef, get_nnzjpucon(nlp))
-  cols = Vector{Int}(undef, get_nnzjpucon(nlp))
-  ucon_jac_param_structure!(nlp, rows, cols)
-end
-
-function ucon_jac_param_coord(nlp::NLPModels.AbstractNLPModel{T, S}) where {T, S}
-  vals = S(undef, get_nnzjpucon(nlp))
-  return ucon_jac_param_coord!(nlp, vals)
-end
-
-function ucon_jpprod(nlp::NLPModels.AbstractNLPModel{T, S}, v::AbstractVector) where {T, S}
-  @lencheck get_nparam(nlp) v
-  Jv = S(undef, NLPModels.get_ncon(nlp))
-  return ucon_jpprod!(nlp, v, Jv)
-end
-
-function ucon_jptprod(nlp::NLPModels.AbstractNLPModel{T, S}, v::AbstractVector) where {T, S}
-  @lencheck NLPModels.get_ncon(nlp) v
-  Jtv = S(undef, get_nparam(nlp))
-  return ucon_jptprod!(nlp, v, Jtv)
-end
-
-function lvar_jac_param_structure(nlp::NLPModels.AbstractNLPModel)
-  rows = Vector{Int}(undef, get_nnzjplvar(nlp))
-  cols = Vector{Int}(undef, get_nnzjplvar(nlp))
-  lvar_jac_param_structure!(nlp, rows, cols)
-end
-
-function lvar_jac_param_coord(nlp::NLPModels.AbstractNLPModel{T, S}) where {T, S}
-  vals = S(undef, get_nnzjplvar(nlp))
-  return lvar_jac_param_coord!(nlp, vals)
-end
-
-function lvar_jpprod(nlp::NLPModels.AbstractNLPModel{T, S}, v::AbstractVector) where {T, S}
-  @lencheck get_nparam(nlp) v
-  Jv = S(undef, NLPModels.get_nvar(nlp))
-  return lvar_jpprod!(nlp, v, Jv)
-end
-
-function lvar_jptprod(nlp::NLPModels.AbstractNLPModel{T, S}, v::AbstractVector) where {T, S}
-  @lencheck NLPModels.get_nvar(nlp) v
-  Jtv = S(undef, get_nparam(nlp))
-  return lvar_jptprod!(nlp, v, Jtv)
-end
-
-function uvar_jac_param_structure(nlp::NLPModels.AbstractNLPModel)
-  rows = Vector{Int}(undef, get_nnzjpuvar(nlp))
-  cols = Vector{Int}(undef, get_nnzjpuvar(nlp))
-  uvar_jac_param_structure!(nlp, rows, cols)
-end
-
-function uvar_jac_param_coord(nlp::NLPModels.AbstractNLPModel{T, S}) where {T, S}
-  vals = S(undef, get_nnzjpuvar(nlp))
-  return uvar_jac_param_coord!(nlp, vals)
-end
-
-function uvar_jpprod(nlp::NLPModels.AbstractNLPModel{T, S}, v::AbstractVector) where {T, S}
-  @lencheck get_nparam(nlp) v
-  Jv = S(undef, NLPModels.get_nvar(nlp))
-  return uvar_jpprod!(nlp, v, Jv)
-end
-
-function uvar_jptprod(nlp::NLPModels.AbstractNLPModel{T, S}, v::AbstractVector) where {T, S}
-  @lencheck NLPModels.get_nvar(nlp) v
-  Jtv = S(undef, get_nparam(nlp))
-  return uvar_jptprod!(nlp, v, Jtv)
-end

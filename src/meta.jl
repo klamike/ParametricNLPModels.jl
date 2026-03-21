@@ -1,7 +1,12 @@
-export AbstractParametricNLPModelMeta, ParametricNLPModelMeta, param_meta
+export AbstractParametricNLPModelMeta, ParametricNLPModelMeta
 
 abstract type AbstractParametricNLPModelMeta end
 
+"""
+    ParametricNLPModelMeta(; kwargs...)
+
+Metadata related to parameters including number of parameters, nonzero counts, and API availability.
+"""
 struct ParametricNLPModelMeta <: AbstractParametricNLPModelMeta
   nparam::Int
   nnzjp::Int
@@ -138,13 +143,12 @@ end
 
 const EMPTY_PARAMETRIC_META = ParametricNLPModelMeta()
 
-param_meta(meta::AbstractParametricNLPModelMeta) = meta
-
-@generated function param_meta(nlp::T) where {T <: NLPModels.AbstractNLPModel}
+@generated function _get_param_meta_field(nlp::T, ::Val{field}) where {T <: NLPModels.AbstractNLPModel, field}
   if :param_meta in fieldnames(T)
-    return :(getfield(nlp, :param_meta))
+    return :(getproperty(getfield(nlp, :param_meta), $(QuoteNode(field))))
   else
-    return :(EMPTY_PARAMETRIC_META)
+    default = getproperty(EMPTY_PARAMETRIC_META, field)
+    return :($default)
   end
 end
 
@@ -152,7 +156,13 @@ for field in fieldnames(ParametricNLPModelMeta)
   meth = Symbol("get_", field)
   @eval begin
     $meth(meta::AbstractParametricNLPModelMeta) = getproperty(meta, $(QuoteNode(field)))
-    $meth(nlp::NLPModels.AbstractNLPModel) = $meth(param_meta(nlp))
+    $meth(nlp::NLPModels.AbstractNLPModel) = _get_param_meta_field(nlp, Val($(QuoteNode(field))))
     export $meth
+  end
+end
+
+let kws = [Expr(:kw, field, Expr(:call, Symbol("get_", field), :nlp)) for field in fieldnames(ParametricNLPModelMeta)]
+  @eval function ParametricNLPModelMeta(nlp::NLPModels.AbstractNLPModel; kwargs...)
+    return ParametricNLPModelMeta(; $(kws...), kwargs...)
   end
 end
