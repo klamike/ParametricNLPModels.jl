@@ -146,10 +146,14 @@ const EMPTY_PARAMETRIC_META = ParametricNLPModelMeta()
 @generated function _get_param_meta_field(nlp::T, ::Val{field}) where {T <: NLPModels.AbstractNLPModel, field}
   if :param_meta in fieldnames(T)
     return :(getproperty(getfield(nlp, :param_meta), $(QuoteNode(field))))
-  else
-    default = getproperty(EMPTY_PARAMETRIC_META, field)
-    return :($default)
+  elseif :meta in fieldnames(T)
+    meta_type = fieldtype(T, :meta)
+    if :nparam in fieldnames(meta_type)
+      return :(getproperty(getfield(nlp, :meta), $(QuoteNode(field))))
+    end
   end
+  default = getproperty(EMPTY_PARAMETRIC_META, field)
+  return :($default)
 end
 
 for field in fieldnames(ParametricNLPModelMeta)
